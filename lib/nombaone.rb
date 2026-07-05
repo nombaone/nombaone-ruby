@@ -21,6 +21,8 @@ require_relative "nombaone/resources/events"
 require_relative "nombaone/resources/organization"
 require_relative "nombaone/resources/metrics"
 require_relative "nombaone/resources/sandbox"
+require_relative "nombaone/webhook_event"
+require_relative "nombaone/webhooks"
 require_relative "nombaone/client"
 
 # NombaOne — recurring billing for Nigeria over card, direct debit, bank
@@ -43,5 +45,14 @@ module Nombaone
   # @return [Nombaone::Client]
   def self.new(api_key = nil, **options)
     Client.new(api_key, **options)
+  end
+
+  # A shared, keyless {Webhooks} helper for verifying inbound deliveries.
+  # Webhook verification needs only the endpoint's signing secret, never an API
+  # key — so this is usable in a receiver that never constructs a client.
+  #
+  # @return [Nombaone::Webhooks]
+  def self.webhooks
+    @webhooks ||= Webhooks.new
   end
 end
