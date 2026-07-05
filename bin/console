@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "nombaone"
+require "irb"
+
+# Usage: `bin/console` for an interactive prompt with the SDK loaded.
+#
+#   nombaone = Nombaone.new(ENV["NOMBAONE_API_KEY"], base_url: ENV["NOMBAONE_BASE_URL"])
+#   nombaone.customers.list.first
+IRB.start(__FILE__)
