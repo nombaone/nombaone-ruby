@@ -61,6 +61,13 @@ Metrics/BlockLength:
     - "Rakefile"
     - "*.gemspec"
 
+# ---- Lint ------------------------------------------------------------------
+Lint/UnusedMethodArgument:
+  # Keyword args often document a duck-typed interface (e.g. a connection's
+  # `execute(method:, url:, headers:, body:, timeout:)`) even when one impl
+  # ignores some of them.
+  AllowUnusedKeywordArguments: true
+
 # ---- Naming ----------------------------------------------------------------
 Naming/MethodParameterName:
   # `id`, `to`, `t` (webhook timestamp) are the wire's own names.
