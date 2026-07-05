@@ -98,6 +98,23 @@ RSpec/SpecFilePathFormat:
   # Specs are organized by phase/topic (unit/, conformance/, integration/),
   # not mirrored one-file-per-class.
   Enabled: false
+# The env-gated integration suite drives a real API: expensive shared setup in
+# before(:all) with @ivars, and load-time locals for `if:` metadata, are correct
+# there.
+RSpec/InstanceVariable:
+  Exclude:
+    - "spec/integration/**/*"
+RSpec/BeforeAfterAll:
+  Exclude:
+    - "spec/integration/**/*"
+RSpec/LeakyLocalVariable:
+  Exclude:
+    - "spec/integration/**/*"
+RSpec/ExpectActual:
+  # `expect(%w[…]).to include(actual)` is a clear membership check when the
+  # acceptable set is the literal and the dynamic value is the actual.
+  Exclude:
+    - "spec/integration/**/*"
 RSpec/DescribeClass:
   Enabled: false
 RSpec/ContextWording:
