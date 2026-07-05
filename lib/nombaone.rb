@@ -8,6 +8,11 @@ require_relative "nombaone/pagination"
 require_relative "nombaone/internal/http_client"
 require_relative "nombaone/resources/base_resource"
 require_relative "nombaone/resources/customers"
+require_relative "nombaone/resources/plans"
+require_relative "nombaone/resources/prices"
+require_relative "nombaone/resources/subscriptions"
+require_relative "nombaone/resources/invoices"
+require_relative "nombaone/resources/coupons"
 require_relative "nombaone/client"
 
 # NombaOne — recurring billing for Nigeria over card, direct debit, bank
