@@ -4,6 +4,7 @@ require_relative "nombaone/version"
 require_relative "nombaone/errors"
 require_relative "nombaone/internal/util"
 require_relative "nombaone/object"
+require_relative "nombaone/pagination"
 require_relative "nombaone/internal/http_client"
 require_relative "nombaone/client"
 

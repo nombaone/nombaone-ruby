@@ -68,6 +68,11 @@ Naming/MethodParameterName:
     - id
     - to
     - t
+Naming/PredicatePrefix:
+  # `has_more?` mirrors the wire's `hasMore`; `has_next_page?` reads naturally.
+  AllowedMethods:
+    - has_more?
+    - has_next_page?
 
 # ---- RSpec -----------------------------------------------------------------
 RSpec/ExampleLength:
