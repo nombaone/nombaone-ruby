@@ -28,11 +28,11 @@ Style/Documentation:
   # need a class banner.
   Enabled: true
 Style/TrailingCommaInArguments:
-  EnforcedStyleForMultiline: consistent_comma
+  EnforcedStyleForMultiline: comma
 Style/TrailingCommaInArrayLiteral:
-  EnforcedStyleForMultiline: consistent_comma
+  EnforcedStyleForMultiline: comma
 Style/TrailingCommaInHashLiteral:
-  EnforcedStyleForMultiline: consistent_comma
+  EnforcedStyleForMultiline: comma
 
 # ---- Metrics ---------------------------------------------------------------
 # An SDK is a broad, flat transcription of a wire contract: many resource

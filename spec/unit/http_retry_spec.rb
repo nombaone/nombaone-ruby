@@ -36,7 +36,7 @@ RSpec.describe "Retry semantics" do
                 "retry-after" => "17",
                 "x-ratelimit-limit" => "120",
                 "x-ratelimit-remaining" => "0",
-              },)
+              })
 
     error = nil
     begin

@@ -43,7 +43,7 @@ module Nombaone
 
         response = http.request(build_request(method, uri, headers, body))
         Response.new(status: response.code.to_i, headers: header_hash(response),
-                     body: response.body,)
+                     body: response.body)
       rescue Net::OpenTimeout, Net::ReadTimeout, Net::WriteTimeout
         raise Nombaone::TimeoutError, "The request to NombaOne timed out after #{timeout}s."
       rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError, IOError,

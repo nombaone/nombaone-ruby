@@ -6,7 +6,7 @@ RSpec.describe Nombaone::APIError do
     error = { "code" => code, "message" => message, "hint" => hint, "docUrl" => doc_url }
     error["fields"] = fields if fields
     { "success" => false, "statusCode" => 0, "error" => error,
-      "meta" => { "requestId" => "req_z" }, }
+      "meta" => { "requestId" => "req_z" } }
   end
 
   describe ".from_response" do

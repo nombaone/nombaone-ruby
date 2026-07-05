@@ -33,7 +33,7 @@ module SpecSupport
       raise item[:error] if item[:kind] == :error
 
       Nombaone::Internal::Response.new(status: item[:status], headers: item[:headers],
-                                       body: item[:body],)
+                                       body: item[:body])
     end
 
     # Queue a raw response. `body` may be a String or a Ruby object (encoded).
@@ -60,7 +60,7 @@ module SpecSupport
                 statusCode: 200,
                 data: data,
                 pagination: { limit: limit || data.length, hasMore: has_more,
-                              nextCursor: next_cursor, },
+                              nextCursor: next_cursor },
                 meta: { requestId: request_id },
               })
     end

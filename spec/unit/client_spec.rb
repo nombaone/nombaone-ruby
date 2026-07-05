@@ -59,7 +59,7 @@ RSpec.describe Nombaone::Client do
       mock = mock_connection
       mock.ok([])
       build_client(mock).request(method: :get, path: "/customers",
-                                 query: { customer_id: "nbo1", limit: 20 },)
+                                 query: { customer_id: "nbo1", limit: 20 })
 
       expect(mock.calls.first.url).to eq("http://api.test/v1/customers?customerId=nbo1&limit=20")
     end
@@ -68,7 +68,7 @@ RSpec.describe Nombaone::Client do
       mock = mock_connection
       mock.ok({})
       build_client(mock).request(method: :post, path: "/customers",
-                                 body: { email: "a@b.co", amount_in_kobo: 100 },)
+                                 body: { email: "a@b.co", amount_in_kobo: 100 })
 
       call = mock.calls.first
       expect(call.headers["content-type"]).to eq("application/json")
@@ -80,7 +80,7 @@ RSpec.describe Nombaone::Client do
       mock.ok({})
       client = build_client(mock, default_headers: { "X-Trace" => "base", "X-Keep" => "yes" })
       client.request(method: :get, path: "/customers",
-                     options: { headers: { "X-Trace" => "call" } },)
+                     options: { headers: { "X-Trace" => "call" } })
 
       headers = mock.calls.first.headers
       expect(headers["x-trace"]).to eq("call")

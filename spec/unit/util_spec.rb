@@ -26,7 +26,7 @@ RSpec.describe Nombaone::Internal::Util do
 
     it "camelizes nested hash keys" do
       body = described_class.serialize_body(branding: { display_name: "Acme",
-                                                        support_email: "s@a", })
+                                                        support_email: "s@a" })
       expect(body).to eq("branding" => { "displayName" => "Acme", "supportEmail" => "s@a" })
     end
 
@@ -46,7 +46,7 @@ RSpec.describe Nombaone::Internal::Util do
     it "drops omitted and nil filters, camelizes keys, stringifies values" do
       query = described_class.serialize_query(
         customer_id: "nbo1", limit: 20, active: true,
-        status: nil, cursor: Nombaone::Internal::OMIT,
+        status: nil, cursor: Nombaone::Internal::OMIT
       )
       expect(query).to eq("customerId" => "nbo1", "limit" => "20", "active" => "true")
     end
