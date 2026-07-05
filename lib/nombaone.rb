@@ -4,25 +4,7 @@ require_relative "nombaone/version"
 require_relative "nombaone/errors"
 require_relative "nombaone/internal/util"
 require_relative "nombaone/object"
-require_relative "nombaone/pagination"
 require_relative "nombaone/internal/http_client"
-require_relative "nombaone/resources/base_resource"
-require_relative "nombaone/resources/customers"
-require_relative "nombaone/resources/plans"
-require_relative "nombaone/resources/prices"
-require_relative "nombaone/resources/subscriptions"
-require_relative "nombaone/resources/invoices"
-require_relative "nombaone/resources/coupons"
-require_relative "nombaone/resources/payment_methods"
-require_relative "nombaone/resources/mandates"
-require_relative "nombaone/resources/settlements"
-require_relative "nombaone/resources/webhook_endpoints"
-require_relative "nombaone/resources/events"
-require_relative "nombaone/resources/organization"
-require_relative "nombaone/resources/metrics"
-require_relative "nombaone/resources/sandbox"
-require_relative "nombaone/webhook_event"
-require_relative "nombaone/webhooks"
 require_relative "nombaone/client"
 
 # NombaOne — recurring billing for Nigeria over card, direct debit, bank
@@ -45,14 +27,5 @@ module Nombaone
   # @return [Nombaone::Client]
   def self.new(api_key = nil, **options)
     Client.new(api_key, **options)
-  end
-
-  # A shared, keyless {Webhooks} helper for verifying inbound deliveries.
-  # Webhook verification needs only the endpoint's signing secret, never an
-  # API key — so this is usable in a receiver that never constructs a client.
-  #
-  # @return [Nombaone::Webhooks]
-  def self.webhooks
-    @webhooks ||= Webhooks.new
   end
 end

@@ -82,3 +82,11 @@ RSpec/MessageSpies:
   Enabled: false
 RSpec/StubbedMock:
   Enabled: false
+RSpec/SpecFilePathFormat:
+  # Specs are organized by phase/topic (unit/, conformance/, integration/),
+  # not mirrored one-file-per-class.
+  Enabled: false
+RSpec/DescribeClass:
+  Enabled: false
+RSpec/ContextWording:
+  Enabled: false
