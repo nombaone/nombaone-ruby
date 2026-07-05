@@ -1,0 +1,51 @@
+module Nombaone
+  module Internal
+    OMIT: Object
+
+    module Util
+      PRESERVE_VALUE_KEYS: Array[String]
+
+      def self?.camelize: (String | Symbol key) -> String
+      def self?.deep_camelize_keys: (untyped value) -> untyped
+      def self?.serialize_body: (Hash[untyped, untyped] hash) -> Hash[String, untyped]
+      def self?.serialize_query: (Hash[untyped, untyped] hash) -> Hash[String, String]
+      def self?.encode_path_segment: (untyped value) -> String
+      def self?.generate_idempotency_key: () -> String
+      def self?.backoff_seconds: (Integer attempt) -> Float
+      def self?.retry_after_seconds: (String? raw) -> Float?
+      def self?.merge_headers: (*Hash[untyped, untyped]? layers) -> Hash[String, String]
+    end
+
+    class Response < Struct[untyped]
+      attr_accessor status: Integer
+      attr_accessor headers: Hash[String, String]
+      attr_accessor body: String?
+    end
+
+    class Result < Struct[untyped]
+      attr_accessor data: untyped
+      attr_accessor pagination: Hash[Symbol, untyped]?
+      attr_accessor request_id: String?
+      attr_accessor response: Nombaone::Internal::Response
+    end
+
+    class NetHTTPConnection
+      METHOD_CLASSES: Hash[Symbol, untyped]
+
+      def execute: (method: Symbol, url: String, headers: Hash[String, String], body: String?,
+                    timeout: Numeric) -> Nombaone::Internal::Response
+    end
+
+    class HTTPClient
+      API_PREFIX: String
+      RETRYABLE_STATUSES: Array[Integer]
+
+      def initialize: (api_key: String, base_url: String, timeout: Numeric, max_retries: Integer,
+                       connection: untyped, ?default_headers: Hash[String, String]?,
+                       ?sleeper: (^(Numeric) -> void)?) -> void
+      def request: (method: Symbol, path: String, ?query: Hash[String, String]?,
+                    ?body: Hash[String, untyped]?, ?options: Hash[Symbol, untyped]?)
+                    -> Nombaone::Internal::Result
+    end
+  end
+end

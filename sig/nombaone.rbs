@@ -1,0 +1,24 @@
+# Type signatures for the NombaOne Ruby SDK.
+
+module Nombaone
+  VERSION: String
+
+  # Free-form annotations attached to most resources. Keys are stored verbatim.
+  type metadata = Hash[Symbol | String, untyped]
+
+  # Per-call overrides accepted by every SDK method as `request_options:`.
+  # Recognized keys: :idempotency_key, :headers, :timeout, :max_retries, :cancel_when.
+  type request_options = Hash[Symbol, untyped]
+
+  # A single-object request result.
+  type record = Nombaone::NombaObject
+
+  # A list request result.
+  type page = Nombaone::Page
+
+  def self.new: (?String? api_key, ?base_url: String?, ?timeout: Numeric,
+                 ?max_retries: Integer, ?http: untyped, ?default_headers: Hash[String, String]?,
+                 ?sleeper: (^(Numeric) -> void)?) -> Nombaone::Client
+
+  def self.webhooks: () -> Nombaone::Webhooks
+end

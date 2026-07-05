@@ -1,0 +1,18 @@
+module Nombaone
+  module WebhookEventType
+    ALL: Array[String]
+  end
+
+  class WebhookEvent < Nombaone::NombaObject
+  end
+
+  class Webhooks
+    DEFAULT_TOLERANCE_SECONDS: Integer
+
+    def construct_event: (String payload, String? signature_header, String? secret,
+                          ?tolerance: Numeric) -> Nombaone::WebhookEvent
+    def verify_signature: (String payload, String? signature_header, String? secret,
+                           ?tolerance: Numeric) -> bool
+    def generate_test_header: (payload: String, secret: String, ?timestamp: Integer?) -> String
+  end
+end

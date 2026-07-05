@@ -1,0 +1,243 @@
+module Nombaone
+  module Resources
+    OMIT: Object
+
+    class BaseResource
+      def initialize: (Nombaone::Client client) -> void
+
+      private
+
+      def request: (Symbol method, String path, ?body: Hash[Symbol, untyped]?,
+                    ?query: Hash[Symbol, untyped]?, ?options: Hash[Symbol, untyped])
+                    -> Nombaone::NombaObject
+      def request_page: (String path, ?query: Hash[Symbol, untyped]?,
+                         ?options: Hash[Symbol, untyped]) -> Nombaone::Page
+      def encode: (untyped value) -> String
+    end
+
+    class Customers < BaseResource
+      def create: (email: String, name: String, ?phone: String?, ?metadata: Nombaone::metadata,
+                   ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def retrieve: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def update: (String id, ?name: String, ?phone: String?, ?metadata: Nombaone::metadata,
+                   ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def list: (?email: String, ?limit: Integer, ?cursor: String,
+                 ?request_options: Nombaone::request_options) -> Nombaone::Page
+      def apply_discount: (String id, coupon: String,
+                           ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def remove_discount: (String id,
+                            ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def grant_credit: (String id, amount_in_kobo: Integer, ?source: String,
+                         ?source_reference: String, ?metadata: Nombaone::metadata,
+                         ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def retrieve_credit_balance: (String id, ?request_options: Nombaone::request_options)
+                                    -> Nombaone::NombaObject
+      def void_credit: (String id, String grant_id, ?request_options: Nombaone::request_options)
+                        -> Nombaone::NombaObject
+    end
+
+    class PlanPrices < BaseResource
+      def create: (String plan_id, unit_amount_in_kobo: Integer, interval: String,
+                   ?interval_count: Integer, ?usage_type: String, ?billing_scheme: String,
+                   ?trial_period_days: Integer, ?metadata: Nombaone::metadata,
+                   ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def list: (String plan_id, ?limit: Integer, ?cursor: String,
+                 ?request_options: Nombaone::request_options) -> Nombaone::Page
+    end
+
+    class Plans < BaseResource
+      def prices: () -> Nombaone::Resources::PlanPrices
+      def create: (name: String, ?description: String, ?metadata: Nombaone::metadata,
+                   ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def retrieve: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def update: (String id, ?name: String, ?description: String?, ?metadata: Nombaone::metadata,
+                   ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def list: (?status: String, ?limit: Integer, ?cursor: String,
+                 ?request_options: Nombaone::request_options) -> Nombaone::Page
+      def archive: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+    end
+
+    class Prices < BaseResource
+      def retrieve: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def list: (?plan_ref: String, ?active: bool, ?limit: Integer, ?cursor: String,
+                 ?request_options: Nombaone::request_options) -> Nombaone::Page
+      def deactivate: (String id, ?request_options: Nombaone::request_options)
+                       -> Nombaone::NombaObject
+    end
+
+    class SubscriptionSchedules < BaseResource
+      def create: (String subscription_id, price_id: String, ?quantity: Integer,
+                   ?effective_at: String, ?request_options: Nombaone::request_options)
+                   -> Nombaone::NombaObject
+      def retrieve: (String subscription_id, ?request_options: Nombaone::request_options)
+                    -> Nombaone::NombaObject
+      def release: (String subscription_id, ?request_options: Nombaone::request_options)
+                   -> Nombaone::NombaObject
+    end
+
+    class SubscriptionDunning < BaseResource
+      def retrieve: (String subscription_id, ?request_options: Nombaone::request_options)
+                    -> Nombaone::NombaObject
+      def list_attempts: (String subscription_id, ?limit: Integer, ?cursor: String,
+                          ?request_options: Nombaone::request_options) -> Nombaone::Page
+    end
+
+    class Subscriptions < BaseResource
+      def schedule: () -> Nombaone::Resources::SubscriptionSchedules
+      def dunning: () -> Nombaone::Resources::SubscriptionDunning
+      def create: (customer_id: String, price_id: String, ?payment_method_id: String,
+                   ?collection_method: String, ?trial_days: Integer, ?quantity: Integer,
+                   ?metadata: Nombaone::metadata, ?request_options: Nombaone::request_options)
+                   -> Nombaone::NombaObject
+      def retrieve: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def update: (String id, ?default_payment_method_id: String, ?metadata: Nombaone::metadata,
+                   ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def list: (?customer_id: String, ?status: String, ?limit: Integer, ?cursor: String,
+                 ?request_options: Nombaone::request_options) -> Nombaone::Page
+      def list_events: (String id, ?limit: Integer, ?cursor: String,
+                        ?request_options: Nombaone::request_options) -> Nombaone::Page
+      def pause: (String id, ?max_days: Integer, ?request_options: Nombaone::request_options)
+                 -> Nombaone::NombaObject
+      def resume: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def cancel: (String id, ?mode: String, ?comment: String,
+                   ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def resubscribe: (String id, ?price_id: String, ?payment_method_id: String,
+                        ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def change: (String id, ?price_id: String, ?quantity: Integer, ?interval_switch: bool,
+                   ?proration_behavior: String, ?request_options: Nombaone::request_options)
+                   -> Nombaone::NombaObject
+      def update_payment_method: (String id, ?payment_method_reference: String,
+                                  ?checkout_token: String,
+                                  ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def retrieve_upcoming_invoice: (String id, ?request_options: Nombaone::request_options)
+                                      -> Nombaone::NombaObject
+      def apply_discount: (String id, coupon: String,
+                           ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def remove_discount: (String id, ?request_options: Nombaone::request_options)
+                           -> Nombaone::NombaObject
+    end
+
+    class Invoices < BaseResource
+      def retrieve: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def list: (?customer_id: String, ?subscription_id: String, ?status: String, ?limit: Integer,
+                 ?cursor: String, ?request_options: Nombaone::request_options) -> Nombaone::Page
+      def void: (String id, ?comment: String, ?request_options: Nombaone::request_options)
+                -> Nombaone::NombaObject
+    end
+
+    class Coupons < BaseResource
+      def create: (code: String, duration: String, ?amount_off_in_kobo: Integer,
+                   ?percent_off: Integer, ?duration_in_cycles: Integer, ?redeem_by: String,
+                   ?max_redemptions: Integer, ?metadata: Nombaone::metadata,
+                   ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def retrieve: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def update: (String id, ?redeem_by: String, ?max_redemptions: Integer,
+                   ?metadata: Nombaone::metadata, ?request_options: Nombaone::request_options)
+                   -> Nombaone::NombaObject
+      def list: (?limit: Integer, ?cursor: String, ?request_options: Nombaone::request_options)
+                -> Nombaone::Page
+    end
+
+    class PaymentMethods < BaseResource
+      def setup: (customer_ref: String, amount_in_kobo: Integer, callback_url: String,
+                  ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def create_virtual_account: (customer_ref: String, ?expected_amount: Integer,
+                                   ?expiry_date: String,
+                                   ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def retrieve: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def list: (?customer_ref: String, ?limit: Integer, ?cursor: String,
+                 ?request_options: Nombaone::request_options) -> Nombaone::Page
+      def set_default: (String id, ?request_options: Nombaone::request_options)
+                       -> Nombaone::NombaObject
+      def remove: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+    end
+
+    class Mandates < BaseResource
+      def create: (customer_ref: String, customer_account_number: String, bank_code: String,
+                   customer_name: String, customer_account_name: String,
+                   customer_phone_number: String, customer_address: String, narration: String,
+                   max_amount_in_kobo: Integer, ?frequency: String, ?start_date: String,
+                   ?end_date: String, ?request_options: Nombaone::request_options)
+                   -> Nombaone::NombaObject
+      def retrieve: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+    end
+
+    class Settlements < BaseResource
+      def retrieve: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def list: (?status: String, ?limit: Integer, ?cursor: String,
+                 ?request_options: Nombaone::request_options) -> Nombaone::Page
+      def retrieve_escrow: (?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def refund: (String id, ?amount_in_kobo: Integer,
+                   ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def create_payout: (amount_in_kobo: Integer, bank_code: String, account_number: String,
+                          ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+    end
+
+    class WebhookEndpointDeliveries < BaseResource
+      def list: (String endpoint_id, ?status: String, ?event_type: String, ?endpoint: String,
+                 ?limit: Integer, ?cursor: String, ?request_options: Nombaone::request_options)
+                 -> Nombaone::Page
+      def retrieve: (String endpoint_id, String delivery_id,
+                     ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def replay: (String endpoint_id, String delivery_id,
+                   ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+    end
+
+    class WebhookEndpoints < BaseResource
+      def deliveries: () -> Nombaone::Resources::WebhookEndpointDeliveries
+      def create: (url: String, ?enabled_events: Array[String],
+                   ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def retrieve: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def update: (String id, ?url: String, ?enabled_events: Array[String], ?disabled: bool,
+                   ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def list: (?request_options: Nombaone::request_options) -> Nombaone::Page
+      def delete: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def rotate_secret: (String id, ?request_options: Nombaone::request_options)
+                         -> Nombaone::NombaObject
+    end
+
+    class Events < BaseResource
+      def list: (?type: String, ?limit: Integer, ?cursor: String,
+                 ?request_options: Nombaone::request_options) -> Nombaone::Page
+      def retrieve: (String id, ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def catalog: (?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+    end
+
+    class OrganizationBilling < BaseResource
+      def retrieve: (?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def update: (?partial_collection_enabled: bool, ?proration_credit_policy: String,
+                   ?dunning_max_attempts: Integer, ?dunning_intervals_hours: Array[Integer],
+                   ?dunning_max_window_hours: Integer, ?grace_period_hours: Integer,
+                   ?payday_days: Array[Integer], ?payday_pull_forward_days: Integer,
+                   ?payday_bias_enabled: bool, ?default_collection_method: String,
+                   ?comms_enabled: bool, ?request_options: Nombaone::request_options)
+                   -> Nombaone::NombaObject
+    end
+
+    class Organization < BaseResource
+      def billing: () -> Nombaone::Resources::OrganizationBilling
+      def retrieve: (?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def update: (?monthly_request_quota: Integer, ?settlement_mode: String,
+                   ?branding: Hash[Symbol, untyped], ?request_options: Nombaone::request_options)
+                   -> Nombaone::NombaObject
+    end
+
+    class Metrics < BaseResource
+      def billing: (?from: String, ?to: String, ?request_options: Nombaone::request_options)
+                   -> Nombaone::NombaObject
+    end
+
+    class Sandbox < BaseResource
+      def create_payment_method: (customer_id: String, ?behavior: String, ?kind: String,
+                                  ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+      def advance_cycle: (String subscription_id, ?request_options: Nombaone::request_options)
+                         -> Nombaone::NombaObject
+      def simulate_webhook: (type: String, ?payload: Hash[Symbol | String, untyped],
+                             ?request_options: Nombaone::request_options) -> Nombaone::NombaObject
+
+      private
+
+      def assert_sandbox!: () -> void
+    end
+  end
+end

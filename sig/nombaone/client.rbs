@@ -1,0 +1,36 @@
+module Nombaone
+  class Client
+    BASE_URLS: Hash[String, String]
+    DEFAULT_TIMEOUT: Integer
+    DEFAULT_MAX_RETRIES: Integer
+
+    attr_reader mode: String
+    attr_reader base_url: String
+
+    def initialize: (?String? api_key, ?base_url: String?, ?timeout: Numeric,
+                     ?max_retries: Integer, ?http: untyped, ?default_headers: Hash[String, String]?,
+                     ?sleeper: (^(Numeric) -> void)?) -> void
+
+    def customers: () -> Nombaone::Resources::Customers
+    def plans: () -> Nombaone::Resources::Plans
+    def prices: () -> Nombaone::Resources::Prices
+    def subscriptions: () -> Nombaone::Resources::Subscriptions
+    def invoices: () -> Nombaone::Resources::Invoices
+    def coupons: () -> Nombaone::Resources::Coupons
+    def payment_methods: () -> Nombaone::Resources::PaymentMethods
+    def mandates: () -> Nombaone::Resources::Mandates
+    def settlements: () -> Nombaone::Resources::Settlements
+    def webhook_endpoints: () -> Nombaone::Resources::WebhookEndpoints
+    def events: () -> Nombaone::Resources::Events
+    def organization: () -> Nombaone::Resources::Organization
+    def metrics: () -> Nombaone::Resources::Metrics
+    def sandbox: () -> Nombaone::Resources::Sandbox
+    def webhooks: () -> Nombaone::Webhooks
+
+    def request: (method: Symbol, path: String, ?query: Hash[Symbol, untyped]?,
+                  ?body: Hash[Symbol, untyped]?, ?options: Hash[Symbol, untyped]?)
+                  -> Nombaone::NombaObject
+    def request_page: (method: Symbol, path: String, ?query: Hash[Symbol, untyped]?,
+                       ?options: Hash[Symbol, untyped]?) -> Nombaone::Page
+  end
+end

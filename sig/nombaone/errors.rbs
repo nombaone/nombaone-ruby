@@ -1,0 +1,68 @@
+module Nombaone
+  module ErrorCode
+    ALL: Array[String]
+  end
+
+  class Error < StandardError
+  end
+
+  class APIError < Error
+    attr_reader status_code: Integer
+    attr_reader code: String
+    attr_reader hint: String
+    attr_reader doc_url: String
+    attr_reader fields: Hash[String, Array[String]]?
+    attr_reader request_id: String?
+
+    def initialize: (String message, status_code: Integer, code: String, ?hint: String,
+                     ?doc_url: String, ?fields: Hash[String, Array[String]]?,
+                     ?request_id: String?) -> void
+
+    def self.from_response: (Integer status, untyped body, untyped headers) -> APIError
+    def self.default_code_for_status: (Integer status) -> String
+    def self.parse_error_body: (untyped body) -> Hash[Symbol, untyped]
+    def self.numeric: (untyped value) -> (Integer | Float)?
+
+    CLASS_FOR_STATUS: Hash[Integer, singleton(APIError)]
+    DEFAULT_CODE_FOR_STATUS: Hash[Integer, String]
+  end
+
+  class BadRequestError < APIError
+  end
+
+  class AuthenticationError < APIError
+  end
+
+  class PermissionDeniedError < APIError
+  end
+
+  class NotFoundError < APIError
+  end
+
+  class ConflictError < APIError
+  end
+
+  class ValidationError < APIError
+  end
+
+  class ServerError < APIError
+  end
+
+  class RateLimitError < APIError
+    attr_reader retry_after: (Integer | Float)?
+    attr_reader limit: (Integer | Float)?
+    attr_reader remaining: (Integer | Float)?
+
+    def initialize: (String message, ?retry_after: (Integer | Float)?, ?limit: (Integer | Float)?,
+                     ?remaining: (Integer | Float)?, **untyped details) -> void
+  end
+
+  class ConnectionError < Error
+  end
+
+  class TimeoutError < ConnectionError
+  end
+
+  class WebhookVerificationError < Error
+  end
+end

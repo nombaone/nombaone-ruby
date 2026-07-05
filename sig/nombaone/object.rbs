@@ -1,0 +1,22 @@
+module Nombaone
+  class NombaObject
+    attr_reader request_id: String?
+    attr_reader last_response: untyped
+
+    def initialize: (untyped values, ?request_id: String?, ?response: untyped) -> void
+    def []: (String | Symbol key) -> untyped
+    def dig: (*(String | Symbol | Integer) keys) -> untyped
+    def key?: (String | Symbol key) -> bool
+    alias has_key? key?
+    alias member? key?
+    def keys: () -> Array[String]
+    def to_h: () -> Hash[String, untyped]
+    alias to_hash to_h
+    def ==: (untyped other) -> bool
+    alias eql? ==
+    def hash: () -> Integer
+    def inspect: () -> String
+    def respond_to_missing?: (Symbol name, ?bool include_private) -> bool
+    def method_missing: (Symbol name, *untyped args) -> untyped
+  end
+end

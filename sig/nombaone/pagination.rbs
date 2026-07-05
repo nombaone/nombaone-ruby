@@ -1,0 +1,23 @@
+module Nombaone
+  class Page
+    include Enumerable[Nombaone::NombaObject]
+
+    attr_reader data: Array[Nombaone::NombaObject]
+    attr_reader request_id: String?
+
+    def initialize: (fetcher: ^(Hash[Symbol, untyped]) -> untyped, query: Hash[Symbol, untyped],
+                     result: untyped) -> void
+    def limit: () -> Integer
+    def has_more?: () -> bool
+    def next_cursor: () -> String?
+    def next_page?: () -> bool
+    alias has_next_page? next_page?
+    def pagination: () -> Nombaone::NombaObject
+    def next_page: () -> Nombaone::Page
+    def each: () { (Nombaone::NombaObject) -> void } -> self
+            | () -> Enumerator[Nombaone::NombaObject, self]
+    alias auto_paging_each each
+    def each_page: () { (Nombaone::Page) -> void } -> self
+                 | () -> Enumerator[Nombaone::Page, self]
+  end
+end
