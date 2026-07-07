@@ -69,10 +69,21 @@ jobs:
       - name: Publish to RubyGems (skips cleanly until publishing is configured)
         if: steps.check.outputs.publish == 'true'
         env:
-          GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+          # NOTE: the fallback secret is passed under its OWN name — never as
+          # GEM_HOST_API_KEY. When Trusted Publishing is used the secret is empty,
+          # and an empty GEM_HOST_API_KEY would override the OIDC credential and
+          # push unauthenticated ("Access Denied. Please sign up for an account").
+          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
         run: |
-          if [ -n "$GEM_HOST_API_KEY" ] || [ -f "$HOME/.gem/credentials" ]; then
-            gem push nombaone-*.gem
-          else
-            echo "::notice::No RubyGems Trusted Publisher and no RUBYGEMS_API_KEY yet — skipping publish. Set one up per PUBLISHING.md, then re-run this workflow."
+          # OIDC Trusted Publishing (previous step) provides the credential via
+          # GEM_HOST_API_KEY and/or ~/.gem/credentials. Only fall back to the
+          # API-key secret when neither exists.
+          if [ -z "${GEM_HOST_API_KEY:-}" ] && [ ! -f "$HOME/.gem/credentials" ]; then
+            if [ -n "${RUBYGEMS_API_KEY:-}" ]; then
+              export GEM_HOST_API_KEY="$RUBYGEMS_API_KEY"
+            else
+              echo "::notice::No RubyGems Trusted Publisher and no RUBYGEMS_API_KEY yet — skipping publish. Set one up per PUBLISHING.md, then re-run this workflow."
+              exit 0
+            fi
           fi
+          gem push nombaone-*.gem
