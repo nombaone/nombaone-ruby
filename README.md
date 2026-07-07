@@ -217,6 +217,14 @@ NOMBAONE_INTEGRATION=1 NOMBAONE_API_KEY=nbo_sandbox_… \
   bundle exec rspec spec/integration
 ```
 
+To prove the whole surface against the sandbox — every method called, with a plain per-method result and a `DEFECTS 0` verdict:
+
+```bash
+NOMBAONE_API_KEY=nbo_sandbox_… ruby -Ilib scripts/verify.rb
+```
+
+Releases are automated and merge-triggered — see [`PUBLISHING.md`](PUBLISHING.md).
+
 ## Requirements & versioning
 
 Ruby ≥ 3.1. Semantic versioning; the API itself is versioned at `/v1` and additive changes never break you. MIT licensed.

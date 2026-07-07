@@ -1,0 +1,78 @@
+name: Release
+
+# Publishing is automated and merge-triggered: every push to `main` runs the
+# full quality gate, then publishes to RubyGems via Trusted Publishing (OIDC —
+# no stored token). It publishes ONLY when the version in lib/nombaone/version.rb
+# is new; a push that doesn't change the version is a no-op (the publish is
+# skipped). So the only action needed to release is bumping `VERSION = "…"` in a
+# merged PR. See PUBLISHING.md for the one-time setup.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write # OIDC → RubyGems Trusted Publishing (no API token stored)
+
+concurrency:
+  group: release
+  cancel-in-progress: false # never interrupt an in-flight publish
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Full quality gate (never ship red)
+        run: |
+          bundle exec rubocop --format github
+          bundle exec rbs -I sig validate
+          bundle exec rspec spec/unit spec/conformance
+
+      # Compare the manifest version against RubyGems: 200 = already published
+      # (skip), 404 = new (publish). This makes a no-bump merge a clean no-op.
+      - name: Is this version already on RubyGems?
+        id: check
+        run: |
+          version="$(ruby -Ilib -e 'require "nombaone/version"; print Nombaone::VERSION')"
+          code="$(curl -s -m 20 -o /dev/null -w '%{http_code}' \
+                  "https://rubygems.org/api/v2/rubygems/nombaone/versions/${version}.json")"
+          if [ "$code" = "200" ]; then
+            echo "nombaone ${version} is already on RubyGems — skipping publish."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "nombaone ${version} is new — will publish."
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build the gem
+        if: steps.check.outputs.publish == 'true'
+        run: gem build nombaone.gemspec
+
+      # Exchanges the GitHub OIDC token for short-lived RubyGems credentials.
+      # Needs a Trusted Publisher configured on rubygems.org for this repo +
+      # workflow (see PUBLISHING.md). If it isn't set up yet, this step is allowed
+      # to fail and the publish falls back to the RUBYGEMS_API_KEY secret.
+      - name: Authenticate to RubyGems (Trusted Publishing)
+        if: steps.check.outputs.publish == 'true'
+        uses: rubygems/configure-rubygems-credentials@main
+        continue-on-error: true
+
+      # Publish only if we actually have credentials (OIDC set up, or the API-key
+      # secret configured). Until then, merges stay green and this step skips with
+      # an actionable notice instead of failing red.
+      - name: Publish to RubyGems (skips cleanly until publishing is configured)
+        if: steps.check.outputs.publish == 'true'
+        env:
+          GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+        run: |
+          if [ -n "$GEM_HOST_API_KEY" ] || [ -f "$HOME/.gem/credentials" ]; then
+            gem push nombaone-*.gem
+          else
+            echo "::notice::No RubyGems Trusted Publisher and no RUBYGEMS_API_KEY yet — skipping publish. Set one up per PUBLISHING.md, then re-run this workflow."
+          fi
