@@ -27,7 +27,7 @@ jobs:
       - name: Unit + conformance tests
         run: bundle exec rspec spec/unit spec/conformance
       - name: Build the gem (package check)
-        run: gem build nomba.gemspec
+        run: gem build nombaone.gemspec
 
   install-check:
     name: "Install the built gem"
@@ -39,6 +39,6 @@ jobs:
           ruby-version: "3.3"
       - name: Build and install into a clean environment
         run: |
-          gem build nomba.gemspec
-          gem install ./nomba-*.gem
-          ruby -e "require 'nomba'; puts Nombaone::VERSION"
+          gem build nombaone.gemspec
+          gem install ./nombaone-*.gem
+          ruby -e "require 'nombaone'; puts Nombaone::VERSION"

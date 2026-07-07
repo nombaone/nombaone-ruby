@@ -1,11 +1,11 @@
-# nomba
+# nombaone
 
 The official Ruby SDK for the [Nomba One](https://nombaone.xyz) subscription-billing API — recurring billing for Nigeria over card, direct debit, bank transfer, and more, with dunning that recovers and a ledger that never loses a kobo.
 
 ```bash
-gem install nomba
+gem install nombaone
 # or add to your Gemfile:
-gem "nomba"
+gem "nombaone"
 ```
 
 Requires Ruby 3.1+. Zero runtime dependencies (built on the standard library). Ships RBS type signatures.
@@ -15,7 +15,7 @@ Requires Ruby 3.1+. Zero runtime dependencies (built on the standard library). S
 Grab a sandbox key (`nbo_sandbox_…`) from the [dashboard](https://app.nombaone.xyz), set it as `NOMBAONE_API_KEY`, and you are three objects away from a live subscription:
 
 ```ruby
-require "nomba"
+require "nombaone"
 
 nombaone = Nombaone.new(ENV["NOMBAONE_API_KEY"])
 

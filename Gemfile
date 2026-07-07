@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Runtime dependencies (there are none) are declared in nomba.gemspec.
+# Runtime dependencies (there are none) are declared in nombaone.gemspec.
 gemspec
 
 group :development, :test do

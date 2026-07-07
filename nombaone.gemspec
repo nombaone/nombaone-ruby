@@ -3,7 +3,7 @@
 require_relative "lib/nombaone/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "nomba"
+  spec.name = "nombaone"
   spec.version = Nombaone::VERSION
   spec.authors = ["Nomba One"]
   spec.email = ["developers@nombaone.xyz"]
@@ -20,9 +20,9 @@ Gem::Specification.new do |spec|
 
   spec.metadata = {
     "homepage_uri" => spec.homepage,
-    "source_code_uri" => "https://github.com/nombaone/nomba-ruby",
-    "changelog_uri" => "https://github.com/nombaone/nomba-ruby/blob/main/CHANGELOG.md",
-    "bug_tracker_uri" => "https://github.com/nombaone/nomba-ruby/issues",
+    "source_code_uri" => "https://github.com/nombaone/nombaone-ruby",
+    "changelog_uri" => "https://github.com/nombaone/nombaone-ruby/blob/main/CHANGELOG.md",
+    "bug_tracker_uri" => "https://github.com/nombaone/nombaone-ruby/issues",
     "documentation_uri" => "https://docs.nombaone.xyz",
     "rubygems_mfa_required" => "true",
   }
