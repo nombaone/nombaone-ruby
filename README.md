@@ -12,7 +12,7 @@ Requires Ruby 3.1+. Zero runtime dependencies (built on the standard library). S
 
 ## Quickstart
 
-Grab a sandbox key (`nbo_sandbox_…`) from the [dashboard](https://app.nombaone.xyz), set it as `NOMBAONE_API_KEY`, and you are three objects away from a live subscription:
+Grab a sandbox key (`nbo_sandbox_…`) from the [dashboard](https://console.nombaone.xyz), set it as `NOMBAONE_API_KEY`, and you are three objects away from a live subscription:
 
 ```ruby
 require "nombaone"
